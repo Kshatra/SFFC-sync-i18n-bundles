@@ -179,7 +179,6 @@ function syncBundle(bundleName) {
                         // add simple comment after namespaced one
                         comment = !!simpleComment ? comment + `${simpleComment}\n` : comment;
                         resultStr = !!comment ? comment + localeString : localeString;
-                        resultStr.indexOf('#') === 0 && console.log('resultStr: ', resultStr);
                         return resultStr;
                     }).join('\n');
 
