@@ -16,7 +16,7 @@ const
 
 const config = {
     i18nBundlesPath: argv.path,
-    // comments that begin with "##" will be considered a namespace comments
+    // comments that begin with "##" will be considered namespace comments
     useLooseNamespacedComments: argv.useLooseNamespacedComments,
     // removes all comments from i18n bundles
     removeAllComments: argv.removeAllComments,
@@ -33,9 +33,9 @@ const config = {
     bundlePrefixSeparator: argv.commentEmptyTranslations || '_',
     // comment line in format "#{namespacedCommentFlag}=aaa.bbb.ccc" will be considered
     // as start of namespaced comment. This comment will always appear at the start
-    // of "aaa.bbb.ccc" namespace of translation string codes
-    // Note that only one namespaced comment could be present
-    namespacedCommentFlag: argv.commentEmptyTranslations || 'namespace'
+    // of "aaa.bbb" namespace of translation string codes
+    // Note that only one namespaced comment could be present and it MUST be defined in "default" bundle file.
+    namespacedCommentFlag: argv.namespacedCommentFlag || 'namespace'
 };
 
 if (!config.i18nBundlesPath) {
@@ -43,7 +43,7 @@ if (!config.i18nBundlesPath) {
     return;
 }
 
-function alphaBeticCompare(a, b) {
+function alphabeticalCompare(a, b) {
     if(a < b) return -1;
     if(a > b) return 1;
     return 0;
@@ -78,7 +78,7 @@ function syncBundle(bundleName) {
                 }
 
                 var lines = fs.readFileSync(fileName).toString().replace(/\r\n/g,'\n').split("\n");
-                for(const lineIndex in lines) {
+                for(let lineIndex in lines) {
                     const lineValue = lines[lineIndex].trim(),
                         separatorIndex = lineValue.indexOf('='),
                         stringCode = lineValue.substring(0, separatorIndex),
@@ -149,7 +149,7 @@ function syncBundle(bundleName) {
                 const namespaceA = a.substring(0, a.lastIndexOf('.')),
                     namespaceB = b.substring(0, b.lastIndexOf('.'));
 
-                return alphaBeticCompare(namespaceA, namespaceB);
+                return alphabeticalCompare(namespaceA, namespaceB);
             });
             let namespaceStartFlag;
 
